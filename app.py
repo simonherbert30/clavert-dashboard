@@ -5,20 +5,19 @@ import numpy as np
 
 
 # ------------------------------------------------------------------------------
-# BRAND COLORS  (Clavert Consulting brand guidelines)
+# BRAND COLORS  (Clavert Consulting — Brand Option 1)
 # ------------------------------------------------------------------------------
 
-DARK_GREEN = "#074434"   # primary — headers, text, chart lines
-MID_GREEN  = "#0a5240"   # sidebar background
-SAGE_GREEN = "#ABC685"   # secondary — accents, KPI borders
-LIME       = "#E8FF99"   # accent — logo highlight
-LIGHT_BG   = "#F7F9CE"   # alternating table rows
-CREAM      = "#FFF6E7"   # page background
+NAVY       = "#142941"   # primary dark navy — headers, text, chart lines
+STEEL      = "#5D7692"   # secondary — sidebar background
+LIGHT_BLUE = "#98C3F4"   # accent — KPI borders, highlights
+WARM_GRAY  = "#CBC9C6"   # dividers, subtle separators
+OFF_WHITE  = "#F7F5F3"   # page background
 WHITE      = "#FFFFFF"
-FONT       = "'Inter', sans-serif"
 
-# Forecast series color (distinct from the two simulator colors)
-FORECAST_COLOR = "#e67e22"
+FORECAST_COLOR = "#5D7692"
+
+FONT = "'HK Grotesk', 'Inter', sans-serif"
 
 
 # ------------------------------------------------------------------------------
@@ -28,7 +27,6 @@ FORECAST_COLOR = "#e67e22"
 MONTHS = ["Jan","Feb","Mar","Apr","May","Jun",
           "Jul","Aug","Sep","Oct","Nov","Dec"]
 
-# Next-year labels used on the forecast chart
 MONTHS_NEXT = [f"{m} '25" for m in MONTHS]
 
 raw = {
@@ -47,61 +45,67 @@ df_long["month"] = pd.Categorical(df_long["month"], categories=MONTHS, ordered=T
 # ------------------------------------------------------------------------------
 
 def kpi_card(label, value_id, sub_label=""):
-    """Branded KPI metric card — reused on both tabs."""
     return html.Div(
         style={
             "backgroundColor": WHITE,
-            "borderRadius": "8px",
+            "borderRadius": "6px",
             "padding": "18px 22px",
             "flex": "1",
-            "borderLeft": f"4px solid {SAGE_GREEN}",
-            "boxShadow": "0 1px 4px rgba(0,0,0,0.07)",
+            "borderLeft": f"4px solid {LIGHT_BLUE}",
+            "boxShadow": "0 1px 6px rgba(20,41,65,0.08)",
         },
         children=[
             html.P(
                 label,
-                style={"margin": "0 0 4px 0", "color": "#888", "fontSize": "11px",
-                       "fontWeight": "600", "textTransform": "uppercase", "letterSpacing": "0.8px"},
+                style={"margin": "0 0 4px 0", "color": STEEL, "fontSize": "10px",
+                       "fontWeight": "700", "textTransform": "uppercase", "letterSpacing": "1px"},
             ),
             html.H2(
                 id=value_id,
-                style={"margin": "0", "color": DARK_GREEN, "fontSize": "26px", "fontWeight": "700"},
+                style={"margin": "0", "color": NAVY, "fontSize": "26px", "fontWeight": "700"},
             ),
             html.P(
                 sub_label,
-                style={"margin": "3px 0 0 0", "color": SAGE_GREEN, "fontSize": "11px"},
+                style={"margin": "3px 0 0 0", "color": WARM_GRAY, "fontSize": "11px"},
             ),
         ],
     )
 
 
 def sidebar(controls):
-    """Dark green sidebar wrapper used on both tabs."""
     return html.Div(
         style={
             "width": "240px",
-            "backgroundColor": MID_GREEN,
+            "backgroundColor": NAVY,
             "padding": "28px 18px",
             "flexShrink": "0",
             "display": "flex",
             "flexDirection": "column",
         },
         children=controls + [
-            html.Hr(style={"borderColor": "rgba(255,255,255,0.1)", "margin": "28px 0"}),
-            html.P("ABOUT", style={"color": SAGE_GREEN, "fontSize": "10px", "fontWeight": "700",
+            html.Hr(style={"borderColor": "rgba(255,255,255,0.08)", "margin": "28px 0"}),
+            html.P("ABOUT", style={"color": LIGHT_BLUE, "fontSize": "10px", "fontWeight": "700",
                                    "letterSpacing": "1.8px", "margin": "0 0 10px 0"}),
             html.P(
                 "We help companies turn data into decisions that actually move the business.",
-                style={"color": "rgba(255,255,255,0.45)", "fontSize": "12px", "lineHeight": "1.7", "margin": "0"},
+                style={"color": "rgba(255,255,255,0.4)", "fontSize": "12px",
+                       "lineHeight": "1.7", "margin": "0"},
             ),
             html.Div(style={"flex": "1"}),
+            html.Hr(style={"borderColor": "rgba(255,255,255,0.08)", "margin": "20px 0 16px"}),
+            html.P("Simon Herbert",
+                   style={"color": WHITE, "fontSize": "12px", "fontWeight": "600", "margin": "0 0 2px 0"}),
+            html.P("DATA ANALYST CONSULTANT",
+                   style={"color": LIGHT_BLUE, "fontSize": "9px", "fontWeight": "700",
+                          "letterSpacing": "1px", "margin": "0 0 4px 0"}),
+            html.P("Tel. (34) 607 282 659",
+                   style={"color": "rgba(255,255,255,0.3)", "fontSize": "11px", "margin": "0 0 2px 0"}),
             html.P("contact@clavert.com",
                    style={"color": "rgba(255,255,255,0.25)", "fontSize": "11px", "margin": "0"}),
         ],
     )
 
 
-# Shared Plotly layout defaults applied to every chart
 CHART_LAYOUT = dict(
     paper_bgcolor=WHITE,
     plot_bgcolor=WHITE,
@@ -112,10 +116,9 @@ CHART_LAYOUT = dict(
     yaxis=dict(gridcolor="#f0f0f0", zeroline=False),
 )
 
-# Tab appearance — inactive vs active
 TAB_STYLE = {
-    "backgroundColor": MID_GREEN,
-    "color": "rgba(255,255,255,0.5)",
+    "backgroundColor": NAVY,
+    "color": "rgba(255,255,255,0.45)",
     "border": "none",
     "padding": "14px 32px",
     "fontFamily": FONT,
@@ -125,9 +128,9 @@ TAB_STYLE = {
 }
 TAB_SELECTED = {
     **TAB_STYLE,
-    "backgroundColor": DARK_GREEN,
-    "color": LIME,
-    "borderBottom": f"3px solid {LIME}",
+    "backgroundColor": NAVY,
+    "color": WHITE,
+    "borderBottom": f"3px solid {LIGHT_BLUE}",
     "fontWeight": "600",
 }
 
@@ -139,10 +142,13 @@ TAB_SELECTED = {
 app = Dash(
     __name__,
     external_stylesheets=[
-        "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        # HK Grotesk via Fontshare (brand primary font)
+        "https://api.fontshare.com/v2/css?f[]=hk-grotesk@400,500,600,700&display=swap",
+        # Inter as fallback
+        "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap",
     ],
 )
-app.title = "Clavert | Sales Dashboard"
+app.title = "Clavert | Business Intelligence Dashboard"
 
 
 # ------------------------------------------------------------------------------
@@ -150,34 +156,46 @@ app.title = "Clavert | Sales Dashboard"
 # ------------------------------------------------------------------------------
 
 app.layout = html.Div(
-    style={"fontFamily": FONT, "backgroundColor": CREAM, "minHeight": "100vh"},
+    style={"fontFamily": FONT, "backgroundColor": OFF_WHITE, "minHeight": "100vh"},
     children=[
 
         # ── HEADER ────────────────────────────────────────────────────────────
         html.Div(
             style={
-                "backgroundColor": DARK_GREEN,
+                "backgroundColor": WHITE,
                 "padding": "0 32px",
                 "display": "flex",
                 "alignItems": "center",
                 "justifyContent": "space-between",
-                "height": "60px",
-                "boxShadow": "0 2px 8px rgba(0,0,0,0.2)",
+                "height": "68px",
+                "borderBottom": f"1px solid {WARM_GRAY}",
+                "boxShadow": "0 1px 6px rgba(20,41,65,0.07)",
             },
             children=[
+                # Logo (Brand Option 1 — dark navy on white)
+                html.Img(
+                    src="/assets/logo.png",
+                    style={"height": "36px", "display": "block"},
+                ),
+                html.Span(
+                    "Business Intelligence Dashboard",
+                    style={"color": STEEL, "fontSize": "14px", "fontWeight": "500",
+                           "letterSpacing": "0.2px"},
+                ),
+                # Digital sign
                 html.Div(
-                    style={"display": "flex", "flexDirection": "column", "lineHeight": "1.1"},
+                    style={"display": "flex", "flexDirection": "column",
+                           "alignItems": "flex-end", "lineHeight": "1.3"},
                     children=[
-                        html.Span("CLAVERT", style={"color": LIME, "fontWeight": "700",
-                                                    "fontSize": "17px", "letterSpacing": "3px"}),
-                        html.Span("CONSULTING", style={"color": SAGE_GREEN, "fontWeight": "400",
-                                                       "fontSize": "9px", "letterSpacing": "3.5px"}),
+                        html.Span("Simon Herbert",
+                                  style={"color": NAVY, "fontWeight": "600", "fontSize": "13px"}),
+                        html.Span("DATA ANALYST CONSULTANT",
+                                  style={"color": LIGHT_BLUE, "fontSize": "9px",
+                                         "fontWeight": "700", "letterSpacing": "1.2px"}),
+                        html.Span("Tel. (34) 607 282 659",
+                                  style={"color": WARM_GRAY, "fontSize": "10px"}),
                     ],
                 ),
-                html.Span("Business Intelligence Dashboard",
-                          style={"color": "rgba(255,255,255,0.75)", "fontSize": "14px", "fontWeight": "500"}),
-                html.Span("Simon Herbert · Data Analyst Consultant",
-                          style={"color": "rgba(255,255,255,0.35)", "fontSize": "11px"}),
             ],
         ),
 
@@ -186,7 +204,7 @@ app.layout = html.Div(
             id="main-tabs",
             value="tab-simulator",
             style={"borderBottom": "none"},
-            colors={"border": MID_GREEN, "primary": LIME, "background": MID_GREEN},
+            colors={"border": NAVY, "primary": LIGHT_BLUE, "background": NAVY},
             children=[
 
                 # ════════════════════════════════════════════════════════════
@@ -199,14 +217,14 @@ app.layout = html.Div(
                     selected_style=TAB_SELECTED,
                     children=[
                         html.Div(
-                            style={"display": "flex", "minHeight": "calc(100vh - 104px)"},
+                            style={"display": "flex", "minHeight": "calc(100vh - 112px)"},
                             children=[
 
                                 sidebar([
-                                    html.P("FILTERS", style={"color": SAGE_GREEN, "fontSize": "10px",
+                                    html.P("FILTERS", style={"color": LIGHT_BLUE, "fontSize": "10px",
                                                              "fontWeight": "700", "letterSpacing": "1.8px",
                                                              "margin": "0 0 16px 0"}),
-                                    html.Label("Product", style={"color": CREAM, "fontSize": "12px",
+                                    html.Label("Product", style={"color": OFF_WHITE, "fontSize": "12px",
                                                                  "fontWeight": "500", "display": "block",
                                                                  "marginBottom": "6px"}),
                                     dcc.Dropdown(
@@ -216,17 +234,17 @@ app.layout = html.Div(
                                         clearable=False,
                                         style={"marginBottom": "26px", "fontSize": "13px"},
                                     ),
-                                    html.Label("Target Multiplier", style={"color": CREAM, "fontSize": "12px",
+                                    html.Label("Target Multiplier", style={"color": OFF_WHITE, "fontSize": "12px",
                                                                            "fontWeight": "500", "display": "block",
                                                                            "marginBottom": "14px"}),
                                     dcc.Slider(
                                         id="sim-multiplier",
                                         min=0.8, max=1.5, step=0.05, value=1.0,
                                         marks={
-                                            0.8: {"label": "0.8×", "style": {"color": SAGE_GREEN, "fontSize": "11px"}},
-                                            1.0: {"label": "1.0×", "style": {"color": LIME, "fontSize": "11px"}},
-                                            1.2: {"label": "1.2×", "style": {"color": SAGE_GREEN, "fontSize": "11px"}},
-                                            1.5: {"label": "1.5×", "style": {"color": SAGE_GREEN, "fontSize": "11px"}},
+                                            0.8: {"label": "0.8×", "style": {"color": WARM_GRAY, "fontSize": "11px"}},
+                                            1.0: {"label": "1.0×", "style": {"color": WHITE,     "fontSize": "11px"}},
+                                            1.2: {"label": "1.2×", "style": {"color": WARM_GRAY, "fontSize": "11px"}},
+                                            1.5: {"label": "1.5×", "style": {"color": WARM_GRAY, "fontSize": "11px"}},
                                         },
                                         tooltip={"placement": "bottom", "always_visible": True},
                                     ),
@@ -236,7 +254,6 @@ app.layout = html.Div(
                                     style={"flex": "1", "padding": "28px 30px", "overflowY": "auto"},
                                     children=[
 
-                                        # KPI row
                                         html.Div(
                                             style={"display": "flex", "gap": "14px", "marginBottom": "22px"},
                                             children=[
@@ -247,46 +264,54 @@ app.layout = html.Div(
                                             ],
                                         ),
 
-                                        # Charts row
                                         html.Div(
                                             style={"display": "flex", "gap": "14px", "marginBottom": "22px"},
                                             children=[
                                                 html.Div(
-                                                    style={"flex": "2", "backgroundColor": WHITE, "borderRadius": "8px",
-                                                           "padding": "16px", "boxShadow": "0 1px 4px rgba(0,0,0,0.07)"},
+                                                    style={"flex": "2", "backgroundColor": WHITE,
+                                                           "borderRadius": "6px", "padding": "16px",
+                                                           "boxShadow": "0 1px 6px rgba(20,41,65,0.08)"},
                                                     children=[dcc.Graph(id="sim-line-chart",
                                                                         config={"displayModeBar": False})],
                                                 ),
                                                 html.Div(
-                                                    style={"flex": "1", "backgroundColor": WHITE, "borderRadius": "8px",
-                                                           "padding": "16px", "boxShadow": "0 1px 4px rgba(0,0,0,0.07)"},
+                                                    style={"flex": "1", "backgroundColor": WHITE,
+                                                           "borderRadius": "6px", "padding": "16px",
+                                                           "boxShadow": "0 1px 6px rgba(20,41,65,0.08)"},
                                                     children=[dcc.Graph(id="sim-bar-chart",
                                                                         config={"displayModeBar": False})],
                                                 ),
                                             ],
                                         ),
 
-                                        # Table
                                         html.Div(
-                                            style={"backgroundColor": WHITE, "borderRadius": "8px",
-                                                   "padding": "20px 22px", "boxShadow": "0 1px 4px rgba(0,0,0,0.07)"},
+                                            style={"backgroundColor": WHITE, "borderRadius": "6px",
+                                                   "padding": "20px 22px",
+                                                   "boxShadow": "0 1px 6px rgba(20,41,65,0.08)"},
                                             children=[
                                                 html.P("Monthly Breakdown",
-                                                       style={"fontWeight": "600", "color": DARK_GREEN,
+                                                       style={"fontWeight": "600", "color": NAVY,
                                                               "fontSize": "13px", "margin": "0 0 14px 0"}),
                                                 dash_table.DataTable(
                                                     id="sim-table",
-                                                    style_header={"backgroundColor": DARK_GREEN, "color": LIME,
-                                                                  "fontWeight": "600", "fontSize": "11px",
-                                                                  "textTransform": "uppercase", "letterSpacing": "0.6px",
-                                                                  "border": "none", "padding": "10px 14px"},
-                                                    style_cell={"fontFamily": FONT, "fontSize": "13px",
-                                                                "padding": "9px 14px", "border": "none",
-                                                                "borderBottom": f"1px solid {LIGHT_BG}", "color": "#333"},
+                                                    style_header={
+                                                        "backgroundColor": NAVY, "color": WHITE,
+                                                        "fontWeight": "600", "fontSize": "11px",
+                                                        "textTransform": "uppercase", "letterSpacing": "0.6px",
+                                                        "border": "none", "padding": "10px 14px",
+                                                    },
+                                                    style_cell={
+                                                        "fontFamily": FONT, "fontSize": "13px",
+                                                        "padding": "9px 14px", "border": "none",
+                                                        "borderBottom": f"1px solid {OFF_WHITE}", "color": "#333",
+                                                    },
                                                     style_data_conditional=[
-                                                        {"if": {"row_index": "odd"}, "backgroundColor": LIGHT_BG},
-                                                        {"if": {"filter_query": "{Gap} < 0"}, "color": "#c0392b", "fontWeight": "600"},
-                                                        {"if": {"filter_query": "{Gap} > 0"}, "color": "#27ae60", "fontWeight": "600"},
+                                                        {"if": {"row_index": "odd"},
+                                                         "backgroundColor": OFF_WHITE},
+                                                        {"if": {"filter_query": "{Gap} < 0"},
+                                                         "color": "#c0392b", "fontWeight": "600"},
+                                                        {"if": {"filter_query": "{Gap} > 0"},
+                                                         "color": "#27ae60", "fontWeight": "600"},
                                                     ],
                                                     page_size=12,
                                                     sort_action="native",
@@ -310,14 +335,14 @@ app.layout = html.Div(
                     selected_style=TAB_SELECTED,
                     children=[
                         html.Div(
-                            style={"display": "flex", "minHeight": "calc(100vh - 104px)"},
+                            style={"display": "flex", "minHeight": "calc(100vh - 112px)"},
                             children=[
 
                                 sidebar([
-                                    html.P("SETTINGS", style={"color": SAGE_GREEN, "fontSize": "10px",
+                                    html.P("SETTINGS", style={"color": LIGHT_BLUE, "fontSize": "10px",
                                                               "fontWeight": "700", "letterSpacing": "1.8px",
                                                               "margin": "0 0 16px 0"}),
-                                    html.Label("Product", style={"color": CREAM, "fontSize": "12px",
+                                    html.Label("Product", style={"color": OFF_WHITE, "fontSize": "12px",
                                                                  "fontWeight": "500", "display": "block",
                                                                  "marginBottom": "6px"}),
                                     dcc.Dropdown(
@@ -327,34 +352,34 @@ app.layout = html.Div(
                                         clearable=False,
                                         style={"marginBottom": "26px", "fontSize": "13px"},
                                     ),
-                                    html.Label("Forecast Horizon (months)", style={"color": CREAM, "fontSize": "12px",
+                                    html.Label("Forecast Horizon (months)", style={"color": OFF_WHITE, "fontSize": "12px",
                                                                                    "fontWeight": "500", "display": "block",
                                                                                    "marginBottom": "14px"}),
                                     dcc.Slider(
                                         id="fc-horizon",
                                         min=1, max=6, step=1, value=3,
-                                        marks={i: {"label": f"{i}m", "style": {"color": SAGE_GREEN, "fontSize": "11px"}}
+                                        marks={i: {"label": f"{i}m", "style": {"color": WARM_GRAY, "fontSize": "11px"}}
                                                for i in range(1, 7)},
                                         tooltip={"placement": "bottom", "always_visible": True},
                                     ),
-                                    html.Hr(style={"borderColor": "rgba(255,255,255,0.1)", "margin": "24px 0"}),
-                                    html.Label("Forecast Method", style={"color": CREAM, "fontSize": "12px",
+                                    html.Hr(style={"borderColor": "rgba(255,255,255,0.08)", "margin": "24px 0"}),
+                                    html.Label("Forecast Method", style={"color": OFF_WHITE, "fontSize": "12px",
                                                                          "fontWeight": "500", "display": "block",
                                                                          "marginBottom": "12px"}),
                                     dcc.RadioItems(
                                         id="fc-method",
                                         options=[
-                                            {"label": " Linear Trend", "value": "linear"},
-                                            {"label": " Moving Average", "value": "ma"},
+                                            {"label": " Linear Trend",    "value": "linear"},
+                                            {"label": " Moving Average",  "value": "ma"},
                                         ],
                                         value="linear",
                                         labelStyle={"display": "block", "color": "rgba(255,255,255,0.8)",
                                                     "fontSize": "13px", "marginBottom": "10px"},
-                                        inputStyle={"marginRight": "8px", "accentColor": LIME},
+                                        inputStyle={"marginRight": "8px", "accentColor": LIGHT_BLUE},
                                     ),
                                     html.Div(
                                         id="fc-method-desc",
-                                        style={"color": "rgba(255,255,255,0.35)", "fontSize": "11px",
+                                        style={"color": "rgba(255,255,255,0.32)", "fontSize": "11px",
                                                "lineHeight": "1.6", "marginTop": "10px"},
                                     ),
                                 ]),
@@ -363,7 +388,6 @@ app.layout = html.Div(
                                     style={"flex": "1", "padding": "28px 30px", "overflowY": "auto"},
                                     children=[
 
-                                        # KPI row
                                         html.Div(
                                             style={"display": "flex", "gap": "14px", "marginBottom": "22px"},
                                             children=[
@@ -374,36 +398,40 @@ app.layout = html.Div(
                                             ],
                                         ),
 
-                                        # Main forecast chart (full width)
                                         html.Div(
-                                            style={"backgroundColor": WHITE, "borderRadius": "8px",
-                                                   "padding": "16px", "boxShadow": "0 1px 4px rgba(0,0,0,0.07)",
+                                            style={"backgroundColor": WHITE, "borderRadius": "6px",
+                                                   "padding": "16px",
+                                                   "boxShadow": "0 1px 6px rgba(20,41,65,0.08)",
                                                    "marginBottom": "22px"},
                                             children=[dcc.Graph(id="fc-chart", config={"displayModeBar": False})],
                                         ),
 
-                                        # Forecast table
                                         html.Div(
-                                            style={"backgroundColor": WHITE, "borderRadius": "8px",
-                                                   "padding": "20px 22px", "boxShadow": "0 1px 4px rgba(0,0,0,0.07)"},
+                                            style={"backgroundColor": WHITE, "borderRadius": "6px",
+                                                   "padding": "20px 22px",
+                                                   "boxShadow": "0 1px 6px rgba(20,41,65,0.08)"},
                                             children=[
                                                 html.P("Forecast Details",
-                                                       style={"fontWeight": "600", "color": DARK_GREEN,
+                                                       style={"fontWeight": "600", "color": NAVY,
                                                               "fontSize": "13px", "margin": "0 0 14px 0"}),
                                                 dash_table.DataTable(
                                                     id="fc-table",
-                                                    style_header={"backgroundColor": DARK_GREEN, "color": LIME,
-                                                                  "fontWeight": "600", "fontSize": "11px",
-                                                                  "textTransform": "uppercase", "letterSpacing": "0.6px",
-                                                                  "border": "none", "padding": "10px 14px"},
-                                                    style_cell={"fontFamily": FONT, "fontSize": "13px",
-                                                                "padding": "9px 14px", "border": "none",
-                                                                "borderBottom": f"1px solid {LIGHT_BG}", "color": "#333"},
+                                                    style_header={
+                                                        "backgroundColor": NAVY, "color": WHITE,
+                                                        "fontWeight": "600", "fontSize": "11px",
+                                                        "textTransform": "uppercase", "letterSpacing": "0.6px",
+                                                        "border": "none", "padding": "10px 14px",
+                                                    },
+                                                    style_cell={
+                                                        "fontFamily": FONT, "fontSize": "13px",
+                                                        "padding": "9px 14px", "border": "none",
+                                                        "borderBottom": f"1px solid {OFF_WHITE}", "color": "#333",
+                                                    },
                                                     style_data_conditional=[
-                                                        {"if": {"row_index": "odd"}, "backgroundColor": LIGHT_BG},
-                                                        # Highlight forecast rows in brand dark green
+                                                        {"if": {"row_index": "odd"},
+                                                         "backgroundColor": OFF_WHITE},
                                                         {"if": {"filter_query": '{Type} = "Forecast"'},
-                                                         "color": DARK_GREEN, "fontWeight": "600"},
+                                                         "color": NAVY, "fontWeight": "600"},
                                                     ],
                                                     page_size=18,
                                                     sort_action="native",
@@ -448,48 +476,44 @@ def update_simulator(selected_product, multiplier):
     dff["target"] = (dff["sales"] * multiplier).round(1)
     dff["gap"]    = (dff["target"] - dff["sales"]).round(1)
 
-    # Line chart: Actual vs Target
     fig_line = go.Figure()
     fig_line.add_trace(go.Scatter(
         x=dff["month"], y=dff["sales"], name="Actual",
         mode="lines+markers",
-        line=dict(color=DARK_GREEN, width=2.5),
-        marker=dict(size=7, color=DARK_GREEN, line=dict(color=WHITE, width=1.5)),
+        line=dict(color=NAVY, width=2.5),
+        marker=dict(size=7, color=NAVY, line=dict(color=WHITE, width=1.5)),
     ))
     fig_line.add_trace(go.Scatter(
         x=dff["month"], y=dff["target"], name="Target",
         mode="lines+markers",
-        line=dict(color=SAGE_GREEN, width=2.5, dash="dash"),
-        marker=dict(size=7, color=SAGE_GREEN, line=dict(color=WHITE, width=1.5)),
+        line=dict(color=LIGHT_BLUE, width=2.5, dash="dash"),
+        marker=dict(size=7, color=LIGHT_BLUE, line=dict(color=WHITE, width=1.5)),
     ))
     fig_line.update_layout(
         title=dict(text=f"Actual vs Target — {selected_product}",
-                   font=dict(size=13, color=DARK_GREEN, family=FONT)),
+                   font=dict(size=13, color=NAVY, family=FONT)),
         **CHART_LAYOUT,
     )
 
-    # Bar chart: all-product annual totals
     totals = df_long.groupby("product", observed=True)["sales"].sum().reset_index()
     totals["target_total"] = (totals["sales"] * multiplier).round(1)
 
     fig_bar = go.Figure()
     fig_bar.add_trace(go.Bar(name="Actual", x=totals["product"], y=totals["sales"],
-                             marker_color=DARK_GREEN, marker_line_width=0))
+                             marker_color=NAVY, marker_line_width=0))
     fig_bar.add_trace(go.Bar(name="Target", x=totals["product"], y=totals["target_total"],
-                             marker_color=SAGE_GREEN, marker_line_width=0))
+                             marker_color=LIGHT_BLUE, marker_line_width=0))
     fig_bar.update_layout(
         title=dict(text="Annual Total — All Products",
-                   font=dict(size=13, color=DARK_GREEN, family=FONT)),
+                   font=dict(size=13, color=NAVY, family=FONT)),
         barmode="group",
         **CHART_LAYOUT,
     )
 
-    # Table
     table_df = dff[["month","sales","target","gap"]].rename(
         columns={"month": "Month", "sales": "Actual", "target": "Target", "gap": "Gap"}
     )
 
-    # KPIs
     total_actual = int(dff["sales"].sum())
     total_target = int(dff["target"].sum())
     avg_actual   = f"{dff['sales'].mean():.1f}"
@@ -531,14 +555,12 @@ def update_forecast(selected_product, horizon, method):
         .copy()
         .sort_values("month")
     )
-    sales = dff["sales"].to_numpy(dtype=float)
-    n     = len(sales)        # 12 historical months
+    sales  = dff["sales"].to_numpy(dtype=float)
+    n      = len(sales)
     x_hist = np.arange(n)
 
-    # ── Forecast calculation ─────────────────────────────────────────────────
     if method == "linear":
-        # Fit a straight line to all 12 months, extrapolate forward
-        coeffs      = np.polyfit(x_hist, sales, 1)  # [slope, intercept]
+        coeffs      = np.polyfit(x_hist, sales, 1)
         x_fc        = np.arange(n, n + horizon)
         fc_values   = np.polyval(coeffs, x_fc).round(1)
         method_name = "Linear Trend"
@@ -547,11 +569,10 @@ def update_forecast(selected_product, horizon, method):
             "using least-squares regression, then extrapolates forward."
         )
     else:
-        # Moving average: use last 3 months to project a flat-ish trend
-        window      = 3
-        last_avg    = sales[-window:].mean()
-        recent_slope = (sales[-1] - sales[-window]) / window  # gentle trend
-        fc_values   = np.array([
+        window       = 3
+        last_avg     = sales[-window:].mean()
+        recent_slope = (sales[-1] - sales[-window]) / window
+        fc_values    = np.array([
             round(last_avg + recent_slope * (i + 1), 1)
             for i in range(horizon)
         ])
@@ -561,22 +582,19 @@ def update_forecast(selected_product, horizon, method):
             "using a gentle slope derived from that window."
         )
 
-    fc_labels = MONTHS_NEXT[:horizon]   # "Jan '25", "Feb '25", ...
+    fc_labels = MONTHS_NEXT[:horizon]
 
-    # ── Chart ────────────────────────────────────────────────────────────────
     fig = go.Figure()
 
-    # Historical line
     fig.add_trace(go.Scatter(
         x=list(dff["month"]),
         y=sales.tolist(),
         name="Historical",
         mode="lines+markers",
-        line=dict(color=DARK_GREEN, width=2.5),
-        marker=dict(size=7, color=DARK_GREEN, line=dict(color=WHITE, width=1.5)),
+        line=dict(color=NAVY, width=2.5),
+        marker=dict(size=7, color=NAVY, line=dict(color=WHITE, width=1.5)),
     ))
 
-    # Bridge point — connect last historical to first forecast visually
     bridge_x = [MONTHS[-1]] + fc_labels
     bridge_y = [float(sales[-1])] + fc_values.tolist()
     fig.add_trace(go.Scatter(
@@ -584,19 +602,18 @@ def update_forecast(selected_product, horizon, method):
         y=bridge_y,
         name="Forecast",
         mode="lines+markers",
-        line=dict(color=FORECAST_COLOR, width=2.5, dash="dot"),
-        marker=dict(size=8, color=FORECAST_COLOR,
+        line=dict(color=STEEL, width=2.5, dash="dot"),
+        marker=dict(size=8, color=STEEL,
                     symbol="diamond", line=dict(color=WHITE, width=1.5)),
     ))
 
-    # Shaded confidence band (±10% of forecast value)
     upper = (fc_values * 1.10).tolist()
     lower = (fc_values * 0.90).tolist()
     fig.add_trace(go.Scatter(
         x=fc_labels + fc_labels[::-1],
         y=upper + lower[::-1],
         fill="toself",
-        fillcolor="rgba(230,126,34,0.10)",
+        fillcolor="rgba(93,118,146,0.10)",
         line=dict(color="rgba(0,0,0,0)"),
         hoverinfo="skip",
         showlegend=True,
@@ -606,12 +623,11 @@ def update_forecast(selected_product, horizon, method):
     fig.update_layout(
         title=dict(
             text=f"Sales Forecast — {selected_product}  ({method_name}, {horizon}m horizon)",
-            font=dict(size=13, color=DARK_GREEN, family=FONT),
+            font=dict(size=13, color=NAVY, family=FONT),
         ),
         **CHART_LAYOUT,
     )
 
-    # ── Table ────────────────────────────────────────────────────────────────
     hist_rows = [
         {"Month": m, "Sales": int(s), "Type": "Historical", "vs Prev Month": ""}
         for m, s in zip(dff["month"].astype(str), sales)
@@ -631,7 +647,6 @@ def update_forecast(selected_product, horizon, method):
     table_data    = hist_rows + fc_rows
     table_columns = [{"name": c, "id": c} for c in ["Month", "Sales", "Type", "vs Prev Month"]]
 
-    # ── KPIs ─────────────────────────────────────────────────────────────────
     fc_total  = fc_values.sum()
     fc_avg    = fc_values.mean()
     last_sale = float(sales[-1])
@@ -652,6 +667,8 @@ def update_forecast(selected_product, horizon, method):
 # ------------------------------------------------------------------------------
 # 7)  RUN
 # ------------------------------------------------------------------------------
+
+server = app.server  # required by gunicorn for production
 
 if __name__ == "__main__":
     app.run_server(debug=True)
